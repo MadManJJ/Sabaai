@@ -1,0 +1,33 @@
+@startuml ClassDiagram
+
+entity "User" as u {
+    *u_id : ObjectId <<generated>>
+    --
+    *name : String
+    *email : String
+    *role : String  // 'admin' or 'user'
+}
+
+entity "Shop" as s {
+    *s_id : ObjectId <<generated>>
+    --
+    *name : String
+    *address : String
+    *telephone : String
+    *openTime : String
+    *closeTime : String
+}
+
+entity "Reservation" as r {
+    *r_id : ObjectId <<generated>>
+    --
+    *date : Date
+    *createdAt : Date
+}
+
+u "1" -- "*" r : makes
+s "1" -- "*" r : has
+
+u "1" -- "*" s : "manages" <<admin only>>
+
+@enduml

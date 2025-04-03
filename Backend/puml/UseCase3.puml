@@ -1,0 +1,54 @@
+@startuml User Shop Reservation System Use Case Diagram
+left to right direction
+
+actor "Guest" as Guest << (G,#ADD8E6) >>
+actor "User" as User << (U,#ADD8E6) >>
+actor "Admin" as Admin << (A,#FFD700) >>
+
+rectangle "User Shop Reservation System" {
+    usecase "Register" as UC1
+    usecase "Login" as UC2
+    usecase "Logout" as UC3
+    usecase "View\nShops" as UC4
+    usecase "View\nSingle Shop" as UC5
+    usecase "Create\nReservation" as UC6
+    usecase "View\nTheir Reservations" as UC7
+    usecase "Edit\nTheir Reservation" as UC8
+    usecase "Delete\nTheir Reservation" as UC9
+    usecase "Create\nShop" as UC10
+    usecase "Update\nShop" as UC11
+    usecase "Delete\nShop" as UC12
+    usecase "View\nAll Reservations" as UC13
+    usecase "Edit\nAny Reservation" as UC14
+    usecase "Delete\nAny Reservation" as UC15
+    
+    Guest --> UC1 #0d00ff
+    Guest --> UC2 #0d00ff
+    Guest --> UC4 #0d00ff
+    Guest --> UC5 #0d00ff
+
+    User --> UC3 #00ff44 
+    User --> UC4 #00ff44
+    User --> UC6 #00ff44
+    User --> UC7 #00ff44
+    User --> UC8 #00ff44
+    User --> UC9 #00ff44
+
+    Admin --> UC3 #ff0000
+    Admin --> UC4 #ff0000
+    Admin --> UC6 #ff0000
+    Admin --> UC10 #ff0000
+    Admin --> UC11 #ff0000
+    Admin --> UC12 #ff0000
+    Admin --> UC13 #ff0000
+    Admin --> UC14 #ff0000
+    Admin --> UC15 #ff0000
+
+    UC6 ..> UC4 : <<include>>
+    UC11 ..> UC4 : <<include>>
+    UC12 ..> UC4  : <<include>>
+    UC14 ..> UC13 : <<include>>
+    UC15 ..> UC13 : <<include>>
+}
+
+@enduml

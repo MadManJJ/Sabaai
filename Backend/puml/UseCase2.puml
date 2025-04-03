@@ -1,0 +1,53 @@
+@startuml Massage Reservation System Use Case Diagram
+left to right direction
+
+rectangle "A1" {
+    actor "User" as User << (U,#ADD8E6) >>
+}
+
+rectangle "A2" {
+    actor "Admin" as Admin << (A,#FFD700) >> 
+}
+
+rectangle "Massage Reservation System" {
+    usecase "Logout" as UC3
+    usecase "View\nMassage Shops" as UC4
+    usecase "Create\nReservation" as UC5
+    usecase "View\nTheir Reservation" as UC6
+    usecase "Edit\nTheir Reservation" as UC7
+    usecase "Delete\nTheir Reservation" as UC8
+    usecase "Create\nShop" as UC9
+    usecase "Update\nShop" as UC10
+    usecase "Delete\nShop" as UC11
+    usecase "View\nAll Reservations" as UC12
+    usecase "Edit\nAny Reservation" as UC13
+    usecase "Delete\nAny Reservation" as UC14
+    
+    User -left-> UC3 
+    User -left-> UC4 
+    User -left-> UC5 
+    User -left-> UC6 
+    User -left-> UC7 
+    User -left-> UC8 
+
+
+    Admin -right-> UC3 
+    Admin -right-> UC4 
+    Admin -right-> UC5 
+    Admin -right-> UC9 
+    Admin -right-> UC10 
+    Admin -right-> UC11 
+    Admin -right-> UC12 
+    Admin -right-> UC13 
+    Admin -right-> UC14 
+
+    UC5 ..> UC4 : <<include>>
+    UC7 ..> UC6 : <<include>>
+    UC8 ..> UC6 : <<include>>
+    UC10 ..> UC4 : <<include>>
+    UC11 ..> UC4 : <<include>>
+    UC13 ..> UC12 : <<include>>
+    UC14 ..> UC12 : <<include>>
+}
+
+@enduml

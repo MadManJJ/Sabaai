@@ -1,0 +1,23 @@
+@startuml Manage Shop (POST)
+
+header Sample Manage Shop Sequence Diagram
+footer Page %page% of %lastpage%
+title "Manage Shop (POST)"
+
+participant "Client" as client
+participant "<<JavaScript>>\n:server" as server
+participant "<<Router>>\n:shops" as routerShops
+participant "<<Controllers>>\n:shops" as controllersShops
+participant "<<Model>>\n:Shop" as modelShop
+database "<<MongoDB>>\n:shops" as ShopsDatabase
+
+client->server ++: req.post('/api/v1/shops/')
+server->routerShops ++: app.use('/api/v1/shops/', shops)
+routerShops -> controllersShops ++: createShop()
+controllersShops->modelShop ++: Shop.create(req.body)
+modelShop -> ShopsDatabase ++: Insert shop document
+ShopsDatabase --> modelShop --: Created shop
+controllersShops <-- modelShop --: shop
+controllersShops->client --: { success: true, msg: "Create shop", data: shop }
+
+@enduml

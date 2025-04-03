@@ -1,0 +1,96 @@
+@startuml
+package "Routes" {
+  class UserRoutes {
+    +GET /users
+    +GET /users/{id}
+    +POST /users
+    +PUT /users/{id}
+    +DELETE /users/{id}
+  }
+  
+  class ShopRoutes {
+    +GET /shops
+    +GET /shops/{id}
+    +POST /shops
+    +PUT /shops/{id}
+    +DELETE /shops/{id}
+  }
+  
+  class ReservationRoutes {
+    +GET /reservations
+    +GET /reservations/{id}
+    +POST /reservations
+    +PUT /reservations/{id}
+    +DELETE /reservations/{id}
+  }
+}
+
+package "Controllers" {
+  class UserController {
+    +getUsers(): User[]
+    +getUser(id: int): User
+    +createUser(user: User): User
+    +updateUser(id: int, user: User): User
+    +deleteUser(id: int): void
+  }
+
+  class ShopController {
+    +getShops(): Shop[]
+    +getShop(id: int): Shop
+    +createShop(shop: Shop): Shop
+    +updateShop(id: int, shop: Shop): Shop
+    +deleteShop(id: int): void
+  }
+
+  class ReservationController {
+    +getReservations(): Reservation[]
+    +getReservation(id: int): Reservation
+    +createReservation(reservation: Reservation): Reservation
+    +updateReservation(id: int, reservation: Reservation): Reservation
+    +deleteReservation(id: int): void
+  }
+}
+
+package "Models" {
+  class User {
+    +id: int
+    +name: string
+    +email: string
+    +password: string
+    +telephone: string
+    +createdAt: Date
+    +updatedAt: Date
+  }
+
+  class Shop {
+    +id: int
+    +name: string
+    +location: string
+    +ownerId: int
+    +createdAt: Date
+    +updatedAt: Date
+  }
+
+  class Reservation {
+    +id: int
+    +userId: int
+    +shopId: int
+    +date: Date
+    +status: string
+    +createdAt: Date
+    +updatedAt: Date
+  }
+}
+
+UserRoutes --> UserController
+ShopRoutes --> ShopController
+ReservationRoutes --> ReservationController
+
+UserController --> User
+ShopController --> Shop
+ReservationController --> Reservation
+
+User "1" -- "many" Reservation : makes
+Shop "1" -- "many" Reservation : receives
+User "1" -- "many" Shop : owns
+@enduml

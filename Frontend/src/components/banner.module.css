@@ -1,0 +1,28 @@
+.banner {
+  position: relative;
+  background: linear-gradient(45deg, #6b4fbd, #ff5b8f); /* gradient as fallback */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bannerText {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  text-align: center;
+}
+
+.bannerText h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.bannerText h3 {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  font-weight: 400;
+}

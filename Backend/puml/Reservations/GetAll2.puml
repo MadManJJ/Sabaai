@@ -1,0 +1,44 @@
+@startuml Manage Reservations (GET)
+
+header Sample Manage Reservations Sequence Diagram
+footer Page %page% of %lastpage%
+title "Manage Reservations" (GET)
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:reservations" as routerReservations
+participant "<<controllers>>\n:reservations" as controllersReservations
+participant "<<model>>\n:Reservation" as modelReservation
+database "<<MongoDB>>\n:ReservationsDatabase" as ReservationsDatabase
+
+client->server ++: req.get('/api/v1/reservations')
+server->routerReservations ++: router.get('/', protect, getReservations)
+routerReservations -> controllersReservations ++: getReservations()
+
+alt User is Admin
+  controllersReservations->modelReservation ++: find().populate('shop')
+else User is Not Admin
+  controllersReservations->modelReservation ++: find({ user: req.user.id }).populate('shop')
+end alt
+
+modelReservation -> ReservationsDatabase ++: Fetch Reservations
+ReservationsDatabase --> modelReservation --: Reservation List
+controllersReservations->client --: response
+
+== Shop-Specific Reservations ==
+
+client->server ++: req.get('/api/v1/:shopId/reservations/')
+server->routerReservations ++: router.get('/:shopId/reservations/', protect, getReservations)
+routerReservations -> controllersReservations ++: getReservations()
+
+alt User is Admin
+  controllersReservations->modelReservation ++: find({ shop: req.params.shopId }).populate('shop')
+else User is Not Admin
+  controllersReservations->modelReservation ++: find({ user: req.user.id, shop: req.params.shopId }).populate('shop')
+end alt
+
+modelReservation -> ReservationsDatabase ++: Fetch Reservations
+ReservationsDatabase --> modelReservation --: Reservation List
+controllersReservations->client --: response
+
+@enduml

@@ -1,0 +1,20 @@
+@startuml Massage Reservation System Use Case Diagram
+left to right direction
+actor "User" as user
+rectangle "Massage Reservation System" as VacQSystem {    
+    usecase "Register" as register
+    usecase "View\nShops" as viewShops
+    usecase "Manage\nReservation" as manageReser
+    usecase "Manage\nShop" as manageShop
+}
+
+user -- register
+user -- viewShops
+user -- manageReser
+
+actor "Admin" as admin
+register -- admin
+manageShop -- admin
+manageReser -- admin
+
+@enduml

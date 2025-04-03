@@ -1,0 +1,36 @@
+@startuml Manage Reservations (GET)
+
+header Sample Get Reservation Sequence Diagram
+footer Page %page% of %lastpage%
+title "Get Reservation" (GET by ID)
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:reservations" as routerReservations
+participant "<<controllers>>\n:reservations" as controllersReservations
+participant "<<model>>\n:Reservation" as modelReservation
+database "<<MongoDB>>\n:ReservationsDatabase" as ReservationsDatabase
+
+client->server ++:req.get('/api/v1/reservations/:id')
+server->routerReservations ++:router.get('/:id', protect, getReservation)
+routerReservations -> controllersReservations ++:getReservation()
+controllersReservations->modelReservation ++:findById(req.params.id).populate('shop')
+modelReservation -> ReservationsDatabase ++: Query Reservation by ID
+ReservationsDatabase --> modelReservation --: Reservation Data
+
+alt Reservation Found
+  modelReservation --> controllersReservations --: Reservation Data
+  
+  alt User is Admin
+    controllersReservations->client --: { success: true, data: reservation }
+  else User is Owner
+    controllersReservations->client --: { success: true, data: reservation }
+  else User is Unauthorized
+    controllersReservations->client --: { success: false, message: "You are not authorized to access this reservation" }
+  end alt
+
+else Reservation Not Found
+  controllersReservations->client --: { success: false, message: "No reservation with the given ID" }
+end alt
+
+@enduml

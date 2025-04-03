@@ -1,0 +1,38 @@
+# Backend
+Backend/node_modules/
+Backend/config/config.env
+
+# Frontend
+Frontend/node_modules/
+Frontend/.pnp
+Frontend/.pnp.js
+Frontend/.yarn/install-state.gz
+
+# Testing
+Frontend/coverage
+
+# Next.js
+Frontend/.next/
+Frontend/out/
+
+# Production
+Frontend/build
+
+# Misc
+Frontend/.DS_Store
+Frontend/*.pem
+
+# Debug
+Frontend/npm-debug.log*
+Frontend/yarn-debug.log*
+Frontend/yarn-error.log*
+
+# Local env files
+Frontend/.env*.local
+
+# Vercel
+Frontend/.vercel
+
+# TypeScript
+Frontend/*.tsbuildinfo
+Frontend/next-env.d.ts

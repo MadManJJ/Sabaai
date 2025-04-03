@@ -1,0 +1,39 @@
+@startuml Get Current User (GET)
+
+header Sample Get Current User Sequence Diagram
+footer Page %page% of %lastpage%
+title "Get Current User" (GET)
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:auth" as routerAuth
+participant "<<middleware>>\n:protect" as middlewareProtect
+participant "<<controllers>>\n:auth" as controllersAuth
+participant "<<model>>\n:User" as modelUser
+database "<<MongoDB>>\n:UsersDatabase" as UsersDatabase
+
+client->server ++: req.get('/api/v1/auth/getme')
+server->routerAuth ++: router.get('/getme', protect, getMe)
+routerAuth -> middlewareProtect ++: protect()
+
+alt Token Present
+  middlewareProtect->middlewareProtect ++: Verify Token (JWT)
+  middlewareProtect->modelUser ++: findById(decoded.id)
+  modelUser -> UsersDatabase ++: Query User by ID
+  UsersDatabase --> modelUser --: User Data
+  
+  alt User Exists
+    modelUser --> middlewareProtect --: User Data
+    middlewareProtect->controllersAuth ++: getMe()
+    controllersAuth->modelUser ++: findById(req.user._id)
+    modelUser --> controllersAuth --: User Data
+    controllersAuth->client --: { success: true, data: user }
+  else User Not Found
+    middlewareProtect->client --: { success: false, message: "User no longer exists" }
+  end alt
+
+else Token Missing
+  middlewareProtect->client --: { success: false, message: "Not authorized to access this route" }
+end alt
+
+@enduml

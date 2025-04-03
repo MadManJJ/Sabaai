@@ -1,0 +1,115 @@
+@startuml
+skinparam stereotype {
+  BackgroundColor #E6E6E6
+  BorderColor black
+}
+
+package "Routes" {
+  class AuthRoutes <<Route>> {
+    +POST /register
+    +POST /login
+    +GET /getme
+    +PUT /ban/{id}
+    +PUT /unban/{id}
+    +GET /logout
+  }
+  
+  class ShopRoutes <<Route>> {
+    +GET /shops
+    +GET /shops/{id}
+    +POST /shops
+    +PUT /shops/{id}
+    +DELETE /shops/{id}
+  }
+  
+  class ReservationRoutes <<Route>> {
+    +GET /reservations
+    +GET /reservations/{id}
+    +POST /reservations
+    +PUT /reservations/{id}
+    +DELETE /reservations/{id}
+  }
+}
+
+package "Controllers" {
+  class AuthController <<Controller>> {
+    +register(): User
+    +login(): User
+    +getMe(): User
+    +logout(): void
+    +banUser(id: int): User
+    +unbanUser(id: int): User
+  }
+
+  class ShopController <<Controller>> {
+    +getShops(): Shop[]
+    +getShop(id: int): Shop
+    +createShop(shop: Shop): Shop
+    +updateShop(id: int, shop: Shop): Shop
+    +deleteShop(id: int): void
+  }
+
+  class ReservationController <<Controller>> {
+    +getReservations(): Reservation[]
+    +getReservation(id: int): Reservation
+    +createReservation(reservation: Reservation): Reservation
+    +updateReservation(id: int, reservation: Reservation): Reservation
+    +deleteReservation(id: int): void
+  }
+}
+
+package "Models" {
+  class User <<Model>> {
+    +id: ObjectId
+    +name: string
+    +email: string
+    +password: string
+    +telephone: string
+    +createdAt: Date
+    +updatedAt: Date
+    +register(): User
+    +login(): User
+    +getMe(): User
+    +logout(): void
+    +banUser(): void
+    +unbanUser(): void
+  }
+
+  class Shop <<Model>> {
+    +id: ObjectId
+    +name: string
+    +location: string
+    +ownerId: int
+    +openTime: string
+    +closeTime: string
+    +createShop(): Shop
+    +getShop(): Shop
+    +updateShop(): Shop
+    +deleteShop(): void
+  }
+
+  class Reservation <<Model>> {
+    +id: ObjectId
+    +userId: int
+    +shopId: int
+    +date: Date
+    +createdAt: Date
+    +createReservation(): Reservation
+    +getReservation(): Reservation
+    +updateReservation(): Reservation
+    +deleteReservation(): void
+  }
+}
+
+AuthRoutes --> AuthController : "invokes"
+ShopRoutes --> ShopController : "invokes"
+ReservationRoutes --> ReservationController : "invokes"
+
+AuthController --> User : "manages"
+ShopController --> Shop : "manages"
+ReservationController --> Reservation : "manages"
+
+User "1" -- "many" Reservation : "makes"
+Shop "1" -- "many" Reservation : "receives"
+User "1" -- "many" Shop : "owns"
+@enduml

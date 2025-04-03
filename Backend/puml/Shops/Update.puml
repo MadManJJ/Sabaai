@@ -1,0 +1,28 @@
+@startuml Manage Shop (PUT)
+
+header Sample Manage Shop Sequence Diagram
+footer Page %page% of %lastpage%
+title "Manage Shop (PUT)"
+
+participant "Client" as client
+participant "<<JavaScript>>\n:server" as server
+participant "<<router>>\n:shops" as routerShops
+participant "<<controllers>>\n:shops" as controllersShops
+participant "<<model>>\n:Shop" as modelShop
+database "<<MongoDB>>\n:shops" as ShopsDatabase
+
+client->server ++: req.put('/api/v1/shops/:id')
+server->routerShops ++: app.use('/api/v1/shops/:id', shops)
+routerShops -> controllersShops ++: updateShop()
+controllersShops->modelShop ++: findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+modelShop -> ShopsDatabase ++: Shopschema
+ShopsDatabase --> modelShop --: shop
+controllersShops <-- modelShop --: shop
+
+alt Shop Found
+  controllersShops->client --: { success: true, msg: "Update shop", data: shop }
+else Shop Not Found
+  controllersShops->client --: { success: false, message: "Shop not found" }
+end alt
+
+@enduml
