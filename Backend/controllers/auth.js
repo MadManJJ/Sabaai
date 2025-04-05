@@ -61,6 +61,37 @@ exports.getMe = async (req, res, next) => {
   res.status(200).json({ success: true, data: user });
 };
 
+// @desc    Update current logged-in user's profile
+// @route   PUT /api/v1/auth/me
+// @access  Private
+exports.updateMe = async (req, res, next) => {
+  try {
+    const updates = {
+      name: req.body.name,
+      telephone: req.body.telephone,
+      
+    };
+
+    const user = await User.findByIdAndUpdate(req.user._id, updates, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      data: user,
+    });
+  } catch (err) {
+    console.log(err.stack);
+    res.status(400).json({
+      success: false,
+      message: "Failed to update profile",
+    });
+  }
+};
+
+
 exports.logout = async (req, res, next) => {
   res.cookie("token", "none", {
     expires: new Date(Date.now() + 5 * 1000),
