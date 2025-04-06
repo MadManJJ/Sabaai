@@ -6,19 +6,29 @@ import getAllServicesFromShop from "@/libs/Service/getServiceFromShop";
 import { DatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { ServiceJson, Shop, ShopJson } from "../../interfaces";
 import { Service } from "../../interfaces";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSession } from "next-auth/react";
 
-const BookingForm = ({ onSubmit, defaultShopId }: { onSubmit: Function, defaultShopId?: string | null }) => {
+const BookingForm = ({ onSubmit, defaultShopId, defaultDate }: { onSubmit: Function, defaultShopId?: string | null, defaultDate?: string | null }) => {
 
     const [shops, setShops] = useState<Shop[] | null>(null);
     const [services, setServices] = useState<Service[] | null>(null);
     const [serviceId, setServiceId] = useState<string | null>(null);
     const [selectedShopId, setSelectedShopId] = useState<string | null>(defaultShopId || null);
     const [date, setDate] = useState<Dayjs | null>(null);
+
+    useEffect(() => {
+        if (defaultDate) {
+            console.log(defaultDate)
+            const defaultDateObj = dayjs(defaultDate, "YYYY/MM/DD");
+            setDate(defaultDateObj);
+        }
+    }, []);
+
+
     const [loading, setLoading] = useState(true);
 
     const { data: session } = useSession();

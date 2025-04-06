@@ -30,6 +30,8 @@ const ReservationCart = () => {
         };
     });
 
+    console.log(connectedReservations)
+
     useEffect(() => {
         const fetchData = async () => {
             if (token) {
