@@ -44,6 +44,8 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please specify if the user is banned"],
     default: false, // Default to false, meaning not banned
   },
+
+  likedShops: [{type: mongoose.Schema.Types.ObjectId, ref: 'Shop'}]
 });
 
 // UserSchema.virtual("reservations", {
